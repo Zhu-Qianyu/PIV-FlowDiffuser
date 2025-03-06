@@ -38,5 +38,6 @@ For any questions regarding this work, please email me at zhuqianyu2@gmail.com.
 
 Parts of the code in this repository have been adapted from the following repos:
 
+- [FlowDiffuser](https://github.com/LA30/FlowDiffuser)
 - [caishensnail/PIV dataset](https://github.com/shengzesnail/PIV_dataset)
 - [RAFT-PIV](https://codeocean.com/capsule/7226151/tree/v1)
