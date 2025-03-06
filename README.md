@@ -22,6 +22,10 @@ matplotlib  3.3.4
 
 ## The experiments
 
-![alt text](1.pdf)Show the comparison results of the operation on class 1 of the [CAI](https://github.com/shengzesnail/PIV_dataset) dataset.
-![alt text](2.pdf)Show the comparison results of the operation on class 2 of the [CAI](https://github.com/shengzesnail/PIV_dataset) dataset.
-![alt text](3.pdf)Show the comparison results of the operation on turbulent wavy channel flow(twcf).
+&bull![alt text](1.pdf)Show the comparison results of the operation on class 1 of the [CAI](https://github.com/shengzesnail/PIV_dataset) dataset.
+
+&bull![alt text](2.pdf)Show the comparison results of the operation on class 2 of the [CAI](https://github.com/shengzesnail/PIV_dataset) dataset.
+
+&bull![alt text](3.pdf)Show the comparison results of the operation on turbulent wavy channel flow(twcf).
+
+
