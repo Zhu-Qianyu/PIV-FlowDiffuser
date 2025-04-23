@@ -197,58 +197,6 @@ class HD1K(FlowDataset):
 
             seq_ix += 1
 
-import os
-import numpy as np
-import torch
-from torch.utils import data
-import torchvision.transforms as transforms
-from torch.utils.data import Dataset
-from scipy.ndimage import rotate
-def rotate_image(image, angle):
-    """
-    旋转图像
-    :param image: 输入的图像，形状为 (H, W, C)
-    :param angle: 旋转角度
-    :return: 旋转后的图像
-    """
-    rotated_image = rotate(image, angle, reshape=False)
-    # 确保数据范围在 [0, 1]
-    rotated_image = np.clip(rotated_image, 0, 1)
-    return rotated_image
-
-def rotate_flow(flow, angle):
-    """
-    旋转光流数据，包括向量和位置
-    :param flow: 输入的光流数据，形状为 (H, W, 2)
-    :param angle: 旋转角度
-    :return: 旋转后的光流数据
-    """
-    h, w = flow.shape[:2]
-    # 旋转光流向量
-    cos_angle = np.cos(np.radians(angle))
-    sin_angle = np.sin(np.radians(angle))
-    R = np.array([[cos_angle, -sin_angle], [sin_angle, cos_angle]])
-    flow_reshaped = flow.reshape(-1, 2)
-    rotated_flow_vectors = np.dot(flow_reshaped, R.T).reshape(flow.shape)
-
-    # 旋转光流位置
-    center = (w // 2, h // 2)
-    x, y = np.meshgrid(np.arange(w), np.arange(h))
-    x_rot = (x - center[0]) * cos_angle - (y - center[1]) * sin_angle + center[0]
-    y_rot = (x - center[0]) * sin_angle + (y - center[1]) * cos_angle + center[1]
-    x_rot = np.round(x_rot).astype(int)
-    y_rot = np.round(y_rot).astype(int)
-
-    # 确保旋转后的坐标在图像范围内
-    x_rot = np.clip(x_rot, 0, w - 1)
-    y_rot = np.clip(y_rot, 0, h - 1)
-
-    # 创建一个新的光流数组来存储旋转后的数据
-    rotated_flow = np.zeros_like(flow)
-    rotated_flow[y_rot.flatten(), x_rot.flatten()] = rotated_flow_vectors.reshape(-1, 2)
-
-    return rotated_flow
-    
 class DatasetPIV(Dataset):
     def __init__(self, data_dir, matching=None, transform=None):
         self.data_dir = data_dir
