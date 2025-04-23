@@ -126,6 +126,60 @@ def valide_CAI(model, args, iters=12):
         results[dataset_type] = (aepe, aae_value,rmse)
     return results
 
+def valide_P2(model, args, iters=12):
+    model.eval()
+    to_tensor = transforms.Compose([
+        transforms.ToTensor()  # Converts a PIL Image or numpy.ndarray to tensor.
+    ])
+    P2_test_path = '/media/newdisk/datasets_piv/piv_raft/Data_ProblemClass2_RAFT-PIV/Validation_Dataset_ProblemClass2_RAFT256-PIV2'
+
+    dataset_types = ['backstep', 'JHTDB', 'cylinder', 'SQG', 'uniform', 'DNS','OTHER']
+    results = {}
+    for dataset_type in dataset_types:
+
+        P2_test_data = DatasetPIV(P2_test_path, dataset_types=[dataset_type], transform=to_tensor)
+        val_dataset = P2_test_data
+        print(f"Length of {dataset_type} dataset: {len(val_dataset)}")
+        epe = []
+        aae = []
+        rmse = []
+        for i in range(len(val_dataset)):
+        # for i in range(30):
+            img1, img2, flow, valid_gt = val_dataset[i]
+            img1 = img1[None].cuda()
+            img2 = img2[None].cuda()
+            flow_low, flow_prediction = model(img1, img2, iters=iters, test_mode=True)
+            flow = flow.squeeze(0)
+            flow_prediction = flow_prediction[-1].squeeze(0)
+            x,y = np.meshgrid(np.arange(256), np.arange(256), indexing="ij")
+            u_gt = flow[1].detach().cpu()
+            v_gt = flow[0].detach().cpu()
+            if args.modty == "1":
+                u_pd = flow_prediction[1].detach().cpu()
+                v_pd = flow_prediction[0].detach().cpu()
+            else:
+                u_pd = flow_prediction[0].detach().cpu()
+                v_pd = flow_prediction[1].detach().cpu()
+            eepe = metrics.EPE(u_gt, v_gt, u_pd, v_pd)
+            ermse = metrics.RMSE(u_gt, v_gt, u_pd, v_pd)
+            eaae = metrics.AAE(u_gt, v_gt, u_pd, v_pd)
+            # print(f"rmse for single = {rmse}")
+            epe.append(eepe)
+            aae.append(eaae)
+            rmse.append(ermse)
+        all_epe_data = np.concatenate([epe_data.flatten() for epe_data in epe])
+        all_aae_data = np.concatenate([aae_data.flatten() for aae_data in aae])
+        all_rmse_data = np.concatenate([rmse_data.flatten() for rmse_data in rmse])
+        aepe = np.average(all_epe_data)
+        aae_value = np.average(all_aae_data)
+        rmse = np.average(all_rmse_data)
+
+        print(f"aepe for {dataset_type} = {aepe}")
+        print(f"aae for {dataset_type} = {aae_value}")
+        print(f"rmse for {dataset_type} = {rmse}")
+        results[dataset_type] = (aepe, aae_value,rmse)
+    return results
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', help="restore checkpoint")
@@ -141,4 +195,6 @@ if __name__ == '__main__':
     model.eval()
     with torch.no_grad():
         if  args.dataset == 'CAI':
-            results = valide_CAI(model.module)
+            results = valide_CAI(model.module,args)
+        if  args.dataset == 'P2':
+            results = valide_P2(model.module,args)
