@@ -38,6 +38,18 @@ In our work, we classify Problem Class2 into 7 types as 'backstep', 'JHTDB', 'cy
 
 ## BibTeX
 
+'''
+@misc{zhu2025pivflowdiffusertransferlearningbaseddenoisingdiffusionmodels,
+      title={PIV-FlowDiffuser:Transfer-learning-based denoising diffusion models for PIV}, 
+      author={Qianyu Zhu and Junjie Wang and Jeremiah Hu and Jia Ai and Yong Lee},
+      year={2025},
+      eprint={2504.14952},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2504.14952}, 
+}
+'''
+
 ## Questions?
 
 For any questions regarding this work, please email me at zhuqianyu2@gmail.com.
