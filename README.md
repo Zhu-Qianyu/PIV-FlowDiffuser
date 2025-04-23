@@ -38,7 +38,9 @@ In our work, we classify Problem Class2 into 7 types as 'backstep', 'JHTDB', 'cy
 
 ## BibTeX
 
-'''
+Please use the following citation if you use `PIV-FlowDiffuser` in your work.
+
+```bibtex
 @misc{zhu2025pivflowdiffusertransferlearningbaseddenoisingdiffusionmodels,
       title={PIV-FlowDiffuser:Transfer-learning-based denoising diffusion models for PIV}, 
       author={Qianyu Zhu and Junjie Wang and Jeremiah Hu and Jia Ai and Yong Lee},
@@ -48,7 +50,7 @@ In our work, we classify Problem Class2 into 7 types as 'backstep', 'JHTDB', 'cy
       primaryClass={cs.CV},
       url={https://arxiv.org/abs/2504.14952}, 
 }
-'''
+```
 
 ## Questions?
 
