@@ -22,8 +22,10 @@ matplotlib  3.3.4
 
 ## Datasets
 To train PIV-FlowDiffuser, you will need to download the required datasets.
+
 - [Problem Class1](https://github.com/shengzesnail/PIV_dataset)
 - [Problem Class2](https://zenodo.org/records/4432496#.YMmLT6gzZaQ)
+
 In our work, we classify Problem Class2 into 7 types as 'backstep', 'JHTDB', 'cylinder', 'SQG', 'uniform', 'DNS' and 'OTHER', the list is given in [problem2labels.csv](https://github.com/Zhu-Qianyu/PIV-FlowDiffuser/blob/main/PIV-FlowDiffuser/problem2labels.csv).
 
 ## The experiments
