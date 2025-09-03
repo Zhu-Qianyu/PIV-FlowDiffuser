@@ -36,6 +36,9 @@ In our work, we classify the validation dataset of Problem Class2 into 7 types a
 
 - ![alt text](3.pdf)Show the comparison results of the operation on turbulent wavy channel flow(twcf).
 
+## Weights
+- [download](https://drive.google.com/file/d/1h_JGcjY6AFqyZDMCcZ6Xe-fnDNbrcv-x/view?usp=drive_link)
+
 ## BibTeX
 
 ```bibtex
