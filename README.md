@@ -1,65 +1,132 @@
 # PIV-FlowDiffuser
-This repository includes the code for the paper _PIV-FlowDiffuser: Transfer-learning-based diffusion models for particle image velocimetry_. In this work, a model incorporating diffusion denoising is utilized to make the PIV optical flow prediction more accurate. The transfer learning method is employed, which significantly reduces the model training cost.
 
-## motivation
-![figa](https://github.com/user-attachments/assets/f178ec91-4a1d-407b-93de-d60b50bdf03a)
-![figb](https://github.com/user-attachments/assets/c84ef904-c024-4e85-a946-239f0de18049)
+**Diffusion models meet particle image velocimetry — accurate flow fields with less training cost.**
 
-Inspired by [FlowDiffuser](https://github.com/LA30/FlowDiffuser),which includes the dual encoder, the conditional recurrent denoising decoder and the reverse denoising process, PIV-FlowDiffuser utilises a denoising diffusion probabilistic model to generate high-resolution flow fields and introduces a detailing denoising step to improve the measurement accuracy of the algorithm.The weights of the pre-trained model were transferred, and the layers associated with the scale transform were added. The model was then comprehensively fine-tuned on the PIV dataset.Since the original weights have learned the general features of optical flow estimation, it is possible to train a model dedicated to the PIV field with only a small amount of computational resources. Moreover, such a model exhibits stronger generalization and robustness.
+[![arXiv](https://img.shields.io/badge/arXiv-2504.14952-b31b1b.svg)](https://arxiv.org/abs/2504.14952)
 
-## Install dependencies
+Official code for the paper [*PIV-FlowDiffuser: Transfer-learning-based diffusion models for particle image velocimetry*](https://arxiv.org/abs/2504.14952).
 
-Python 3.8 with following packages
-```Shell
-pytorch  2.3.1
-torchvision  0.18.1
-numpy  1.19.5
+---
+
+## What is Particle Image Velocimetry (PIV)?
+
+<p align="center">
+  <img src="fig5.png" alt="PIV overview: ground truth, predicted vector field, residual, and experimental setup" width="720"/>
+</p>
+
+**Particle Image Velocimetry (PIV)** is a laser-based, non-intrusive technique for measuring how fluids move. Tiny tracer particles are seeded into the flow and illuminated by a thin light sheet; high-speed cameras then capture pairs of particle images in quick succession. By tracking how particle patterns shift between frames, PIV reconstructs a **velocity vector field** — a map of speed and direction at every point in the measurement plane.
+
+The figure above illustrates the full picture:
+
+| Panel | What it shows |
+| :---: | --- |
+| **(a)** | **Ground-truth flow** — the reference velocity field for a vortex case |
+| **(b)** | **PIV vector field** — the flow recovered from particle images |
+| **(c)** | **Residual** — the point-wise error between prediction and truth |
+| **(d)** | **Experimental setup** — the real hardware: laser illumination, cameras, and rotating test rig |
+
+PIV is widely used in aerodynamics, turbomachinery, biomedical flows, and turbulence research — anywhere you need to *see* fluid motion without disturbing it. The central challenge is turning noisy, sparse particle images into **dense, high-resolution velocity fields** with sub-pixel accuracy. That is exactly what **PIV-FlowDiffuser** is built for.
+
+---
+
+## Why PIV-FlowDiffuser?
+
+Traditional PIV pipelines rely on cross-correlation and handcrafted post-processing. Deep learning methods improve accuracy but often demand large labeled datasets and heavy compute. **PIV-FlowDiffuser** takes a different path:
+
+- **Diffusion-based denoising** progressively refines optical-flow predictions for sharper, more accurate vector fields
+- **Transfer learning** from a pre-trained [FlowDiffuser](https://github.com/LA30/FlowDiffuser) model — general optical-flow features are reused, so fine-tuning on PIV data needs far less time and data
+- **Detail denoising step** targets the fine-scale errors that matter most in PIV measurement
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f178ec91-4a1d-407b-93de-d60b50bdf03a" alt="PIV-FlowDiffuser architecture" width="720"/>
+</p>
+
+Built on FlowDiffuser's dual encoder, conditional recurrent denoising decoder, and reverse diffusion process, PIV-FlowDiffuser adds scale-transform layers and is comprehensively fine-tuned on PIV benchmarks. Because the backbone already understands motion, the PIV-specialized model trains efficiently — and generalizes robustly across flow types.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c84ef904-c024-4e85-a946-239f0de18049" alt="Transfer learning pipeline" width="640"/>
+</p>
+
+---
+
+## Getting Started
+
+### Install dependencies
+
+Python 3.8 with the following packages:
+
+```shell
+pytorch        2.3.1
+torchvision    0.18.1
+numpy          1.19.5
 opencv-python  4.6.0.66
-timm  0.6.12
-scipy  3.6.2
-matplotlib  3.3.4
+timm           0.6.12
+scipy          3.6.2
+matplotlib     3.3.4
 ```
 
+Code lives in the [`PIV-FlowDiffuser/`](PIV-FlowDiffuser/) subdirectory. See `train.sh` and `eval.sh` for training and evaluation entry points.
+
+### Pre-trained weights
+
+Download the fine-tuned model weights here:
+
+**[Google Drive → PIV-FlowDiffuser weights](https://drive.google.com/file/d/1h_JGcjY6AFqyZDMCcZ6Xe-fnDNbrcv-x/view?usp=drive_link)**
+
+---
+
 ## Datasets
-To train PIV-FlowDiffuser, you will need to download the required datasets.
 
-- [Problem Class1](https://github.com/shengzesnail/PIV_dataset)
-- [Problem Class2](https://zenodo.org/records/4432496#.YMmLT6gzZaQ)
+Training and evaluation use two public PIV benchmark collections:
 
-In our work, we classify the validation dataset of Problem Class2 into 7 types as 'backstep', 'JHTDB', 'cylinder', 'SQG', 'uniform', 'DNS' and 'OTHER', the list is given in [problem2labels.csv](https://github.com/Zhu-Qianyu/PIV-FlowDiffuser/blob/main/PIV-FlowDiffuser/problem2labels.csv).
+| Dataset | Link |
+| --- | --- |
+| Problem Class 1 | [shengzesnail/PIV_dataset](https://github.com/shengzesnail/PIV_dataset) |
+| Problem Class 2 | [Zenodo record](https://zenodo.org/records/4432496#.YMmLT6gzZaQ) |
 
-## The experiments
+For Problem Class 2 validation, we further split flows into seven categories — `backstep`, `JHTDB`, `cylinder`, `SQG`, `uniform`, `DNS`, and `OTHER`. The full label list is in [`PIV-FlowDiffuser/problem2labels.csv`](PIV-FlowDiffuser/problem2labels.csv).
 
-- ![alt text](1.pdf)Show the comparison results of the operation on class 1 of the [CAI](https://github.com/shengzesnail/PIV_dataset) dataset.
+---
 
-- ![alt text](2.pdf)Show the comparison results of the operation on class 2 of the [CAI](https://github.com/shengzesnail/PIV_dataset) dataset.
+## Results
 
-- ![alt text](3.pdf)Show the comparison results of the operation on turbulent wavy channel flow(twcf).
+Side-by-side comparisons against baselines on three benchmark settings:
 
-## Weights
-- [download](https://drive.google.com/file/d/1h_JGcjY6AFqyZDMCcZ6Xe-fnDNbrcv-x/view?usp=drive_link)
+| Figure | Benchmark |
+| --- | --- |
+| [1.pdf](1.pdf) | Problem Class 1 — [CAI dataset](https://github.com/shengzesnail/PIV_dataset) |
+| [2.pdf](2.pdf) | Problem Class 2 — [CAI dataset](https://github.com/shengzesnail/PIV_dataset) |
+| [3.pdf](3.pdf) | Turbulent wavy channel flow (TWCF) |
 
-## BibTeX
+---
+
+## Citation
+
+If you find this work useful, please cite:
 
 ```bibtex
 @misc{zhu2025pivflowdiffusertransferlearningbaseddenoisingdiffusionmodels,
-      title={PIV-FlowDiffuser:Transfer-learning-based denoising diffusion models for PIV}, 
+      title={PIV-FlowDiffuser: Transfer-learning-based denoising diffusion models for PIV},
       author={Qianyu Zhu and Junjie Wang and Jeremiah Hu and Jia Ai and Yong Lee},
       year={2025},
       eprint={2504.14952},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.14952}, 
+      url={https://arxiv.org/abs/2504.14952},
 }
 ```
 
-## Questions?
+---
 
-For any questions regarding this work, please email me at zhuqianyu2@gmail.com.
+## Contact
+
+Questions or collaboration ideas? Reach out at **zhuqianyu2@gmail.com**.
+
+---
 
 ## Acknowledgements
 
-Parts of the code in this repository have been adapted from the following repos:
+This project builds on excellent prior work:
 
 - [FlowDiffuser](https://github.com/LA30/FlowDiffuser)
 - [caishensnail/PIV dataset](https://github.com/shengzesnail/PIV_dataset)
