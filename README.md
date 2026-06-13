@@ -2,7 +2,7 @@
 
 **Diffusion models meet particle image velocimetry — accurate flow fields with less training cost.**
 
-[![Journal](https://img.shields.io/badge/Sensors-25(19)-6077-2ea043.svg)](https://www.mdpi.com/1424-8220/25/19/6077)
+[![Journal](https://img.shields.io/badge/Sensors-2025_6077-2ea043.svg)](https://www.mdpi.com/1424-8220/25/19/6077)
 [![arXiv](https://img.shields.io/badge/arXiv-2504.14952-b31b1b.svg)](https://arxiv.org/abs/2504.14952)
 
 Official code for the paper [*PIV-FlowDiffuser: Transfer-Learning-Based Denoising Diffusion Models for Particle Image Velocimetry*](https://www.mdpi.com/1424-8220/25/19/6077) (*Sensors* **2025**, *25*(19), 6077).
