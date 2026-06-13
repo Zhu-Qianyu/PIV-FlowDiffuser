@@ -2,9 +2,10 @@
 
 **Diffusion models meet particle image velocimetry — accurate flow fields with less training cost.**
 
+[![Journal](https://img.shields.io/badge/Sensors-25(19)-6077-2ea043.svg)](https://doi.org/10.3390/s25196077)
 [![arXiv](https://img.shields.io/badge/arXiv-2504.14952-b31b1b.svg)](https://arxiv.org/abs/2504.14952)
 
-Official code for the paper [*PIV-FlowDiffuser: Transfer-learning-based diffusion models for particle image velocimetry*](https://arxiv.org/abs/2504.14952).
+Official code for the paper [*PIV-FlowDiffuser: Transfer-Learning-Based Denoising Diffusion Models for Particle Image Velocimetry*](https://doi.org/10.3390/s25196077) (*Sensors* **2025**, *25*(19), 6077).
 
 ---
 
@@ -105,14 +106,17 @@ Side-by-side comparisons against baselines on three benchmark settings:
 If you find this work useful, please cite:
 
 ```bibtex
-@misc{zhu2025pivflowdiffusertransferlearningbaseddenoisingdiffusionmodels,
-      title={PIV-FlowDiffuser: Transfer-learning-based denoising diffusion models for PIV},
-      author={Qianyu Zhu and Junjie Wang and Jeremiah Hu and Jia Ai and Yong Lee},
+@article{zhu2025pivflowdiffuser,
+      title={PIV-FlowDiffuser: Transfer-Learning-Based Denoising Diffusion Models for Particle Image Velocimetry},
+      author={Zhu, Qianyu and Wang, Junjie and Hu, Jeremiah and Ai, Jia and Lee, Yong},
+      journal={Sensors},
+      volume={25},
+      number={19},
+      pages={6077},
       year={2025},
-      eprint={2504.14952},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.14952},
+      publisher={MDPI},
+      doi={10.3390/s25196077},
+      url={https://doi.org/10.3390/s25196077},
 }
 ```
 
